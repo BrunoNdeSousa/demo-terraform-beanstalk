@@ -1,7 +1,7 @@
-resource "aws_iam_policy" "Travis-Deploy-To-S3" {
-  name        = "Travis-Deploy-To-S3"
+resource "aws_iam_policy" "Deploy-To-S3" {
+  name        = "Deploy-To-S3"
   path        = "/"
-  description = "Travis-Deploy-To-S3"
+  description = "Deploy-To-S3"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -23,10 +23,10 @@ resource "aws_iam_policy" "Travis-Deploy-To-S3" {
     })
 }
 
-resource "aws_iam_policy" "Travis-Deploy-To-EB" {
-  name        = "Travis-Deploy-To-EB"
+resource "aws_iam_policy" "Deploy-To-EB" {
+  name        = "Deploy-To-EB"
   path        = "/"
-  description = "Travis-Deploy-To-EB"
+  description = "Deploy-To-EB"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -49,38 +49,38 @@ resource "aws_iam_policy" "Travis-Deploy-To-EB" {
     })
 }
 
-resource "aws_iam_policy_attachment" "Travis-Deploy-To-EB-attc" {
-  name       = "Travis-Deploy-To-EB-attc"
-  users      = ["Travis"]
-  policy_arn = aws_iam_policy.Travis-Deploy-To-EB.arn
+resource "aws_iam_policy_attachment" "Deploy-To-EB-attc" {
+  name       = "Deploy-To-EB-attc"
+  users      = local.user
+  policy_arn = aws_iam_policy.Deploy-To-EB.arn
 }
 
-resource "aws_iam_policy_attachment" "Travis-Deploy-To-S3-attc" {
-  name       = "Travis-Deploy-To-S3-attc"
-  users      = ["Travis"]
-  policy_arn = aws_iam_policy.Travis-Deploy-To-S3.arn
+resource "aws_iam_policy_attachment" "Deploy-To-S3-attc" {
+  name       = "Deploy-To-S3-attc"
+  users      = local.user
+  policy_arn = aws_iam_policy.Deploy-To-S3.arn
 }
 
-resource "aws_iam_policy_attachment" "Travis-VPC-Access" {
-  name       = "Travis-VPC-Access"
-  users      = ["Travis"]
+resource "aws_iam_policy_attachment" "VPC-Access" {
+  name       = "VPC-Access"
+  users      = local.user
   policy_arn = "arn:aws:iam::aws:policy/AmazonVPCFullAccess"
 }
 
-resource "aws_iam_policy_attachment" "Travis-EC2-Access" {
-  name       = "Travis-EC2-Access"
-  users      = ["Travis"]
+resource "aws_iam_policy_attachment" "EC2-Access" {
+  name       = "EC2-Access"
+  users      = local.user
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
 resource "aws_iam_policy_attachment" "ElasticBeanstalkCustom" {
-  name       = "TravisElasticBeanstalkCustom"
-  users      = ["Travis"]
+  name       = "ElasticBeanstalkCustom"
+  users      = local.user
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkCustomPlatformforEC2Role"
 }
 
 resource "aws_iam_policy_attachment" "CloudFormationRead" {
   name       = "CloudFormationRead"
-  users      = ["Travis"]
+  users      = local.user
   policy_arn = "arn:aws:iam::aws:policy/AWSCloudFormationReadOnlyAccess"
 }
